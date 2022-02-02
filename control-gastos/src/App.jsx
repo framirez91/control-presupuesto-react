@@ -1,22 +1,74 @@
 import { useState } from 'react'
 import Header from './components/Header'
+import Modal from './components/Modal'
+import { generarId } from './helpers'
+
+import IconoNuevoGasto from './img/nuevo-gasto.svg'
+
 
 function App() {
   const [presupuesto, setPresupuesto] = useState(0)
   const [isValidPresepuesto, setIsValidPresepuesto] = useState(false)
+  const [modal, setModal] = useState(false)
+  const [animarModal, setAnimarModal] = useState(false)
+  const [gastos, setGastos] = useState([])
+  
+  const handleNuevoGasto = () => {
+    setModal(true)
+    setTimeout(() => {
+      setAnimarModal(true)
+
+    }, 500);
+  }
+
+
+  const guardarGasto = gasto =>{
+    gasto.id = generarId()
+    setGastos([...gastos, gasto])
+
+    setAnimarModal(false)//para que se cierre el modal
+
+        setTimeout(() => {
+            setModal(false)
+      
+          }, 500)
+  }
+
 
 
   return (
-   <div>
-      <Header 
-      presupuesto={presupuesto}
-      setPresupuesto={setPresupuesto}
-      isValidPresepuesto={isValidPresepuesto}
-      setIsValidPresepuesto={setIsValidPresepuesto}
+    <div>
+      <Header
+        presupuesto={presupuesto}
+        setPresupuesto={setPresupuesto}
+        isValidPresepuesto={isValidPresepuesto}
+        setIsValidPresepuesto={setIsValidPresepuesto}
 
       />
-   </div>
-   
+
+      {isValidPresepuesto && (<div className='nuevo-gasto'>
+        <img
+          src={IconoNuevoGasto}
+          alt="IconoNuevoGasto"
+          onClick={handleNuevoGasto}
+        />
+      </div>
+        // si el presupuesto es valido, entonces se muestra el componente NuevoGasto
+      )}
+
+      {modal && (
+        <Modal
+          setModal={setModal}
+          animarModal={animarModal}
+          setAnimarModal={setAnimarModal}
+          guardarGasto={guardarGasto}
+
+        />)}
+
+
+    </div>
+
+
   )
 }
 

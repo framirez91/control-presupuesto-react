@@ -13,11 +13,23 @@ function App() {
   const [modal, setModal] = useState(false)
   const [animarModal, setAnimarModal] = useState(false)
   const [gastoEditar, setGastoEditar] = useState({})
-  useEffect(() =>{},
-  [])
-  
+
+  useEffect(() => {
+    if (Object.keys(gastoEditar).length > 0) {
+      setModal(true)
+      setTimeout(() => {
+        setAnimarModal(true)
+
+      }, 500);
+
+    }
+  }, [gastoEditar])
+
   const handleNuevoGasto = () => {
     setModal(true)
+    setGastoEditar({})
+
+
     setTimeout(() => {
       setAnimarModal(true)
 
@@ -25,23 +37,33 @@ function App() {
   }
 
 
-  const guardarGasto = gasto =>{
-    gasto.id = generarId()
-    gasto.fecha = Date.now()
-    setGastos([...gastos, gasto])
+  const guardarGasto = gasto => {
+    if (gasto.id) {
+      //actualizar el gasto
+      const gastoActualizados = gastos.map( gastoState => gastoState.id ===
+       gasto.id ? gasto : gastoState)
+      setGastos(gastoActualizados)
+    } else {
+      //agregar gasto
+      gasto.id = generarId()
+      gasto.fecha = Date.now()
+      setGastos([...gastos, gasto])
+    }
+
+
 
     setAnimarModal(false)//para que se cierre el modal
 
-        setTimeout(() => {
-            setModal(false)
-      
-          }, 500)
+    setTimeout(() => {
+      setModal(false)
+
+    }, 500)
   }
 
 
 
   return (
-    <div className={modal ? 'fijar':''}>
+    <div className={modal ? 'fijar' : ''}>
       <Header
         gastos={gastos}
         presupuesto={presupuesto}
@@ -52,24 +74,24 @@ function App() {
       />
 
       {isValidPresepuesto && (
-      <>
-      <main>
-        <ListadoGastos 
-        gastos={gastos}
-        setGastoEditar={setGastoEditar}
-        
-        />
+        <>
+          <main>
+            <ListadoGastos
+              gastos={gastos}
+              setGastoEditar={setGastoEditar}
+
+            />
 
 
-      </main>
-      <div className='nuevo-gasto'>
-        <img
-          src={IconoNuevoGasto}
-          alt="IconoNuevoGasto"
-          onClick={handleNuevoGasto}
-        />
-      </div>
-       </> // si el presupuesto es valido, entonces se muestra el componente NuevoGasto
+          </main>
+          <div className='nuevo-gasto'>
+            <img
+              src={IconoNuevoGasto}
+              alt="IconoNuevoGasto"
+              onClick={handleNuevoGasto}
+            />
+          </div>
+        </> // si el presupuesto es valido, entonces se muestra el componente NuevoGasto
       )}
 
       {modal && (
@@ -78,6 +100,7 @@ function App() {
           animarModal={animarModal}
           setAnimarModal={setAnimarModal}
           guardarGasto={guardarGasto}
+          gastoEditar={gastoEditar}
 
         />)}
 

@@ -10,7 +10,9 @@ export const formatearFecha = (fecha) => {
     const options = {
         year: 'numeric',
         month: 'long',
-        day: '2-digit'
+        day: '2-digit',
+        
+    
     }
     return fechaFormateada.toLocaleDateString('es-ES', options)
 }

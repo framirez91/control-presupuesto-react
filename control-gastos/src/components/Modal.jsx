@@ -31,7 +31,7 @@ const Modal = ({ setModal ,animarModal ,setAnimarModal,guardarGasto }) => {
         return
 
         }else{
-            console.log("enviando formulario")
+            console.log("")
         }
 
         guardarGasto({nombre,cantidad,categoria})

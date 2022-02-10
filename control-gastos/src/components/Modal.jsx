@@ -107,6 +107,7 @@ const Modal = ({ setModal,
                         <option value="">--Seleccione--</option>
                         <option value="ahorro">Ahorro</option>
                         <option value="comida">Comida</option>
+                        <option value="casa">Casa</option>
                         <option value="gastos">Gastos Varios</option>
                         <option value="ocio">Ocio</option>
                         <option value="salud">Salud</option>

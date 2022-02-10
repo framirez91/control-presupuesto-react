@@ -3,7 +3,15 @@ import { CircularProgressbar, buildStyles } from 'react-circular-progressbar'
 import 'react-circular-progressbar/dist/styles.css'
 
 
-const ControlPresupuesto = ({ presupuesto, gastos }) => {
+const ControlPresupuesto = ({ 
+gastos,
+setGastos,
+presupuesto,
+setPresupuesto,
+setIsValidPresepuesto,
+
+
+}) => {
     const[disponible,setDisponible] = useState(0)
     const[gastado,setGastado] = useState(0)
     const[porcentaje,setPorcentaje] = useState(0)
@@ -16,9 +24,6 @@ const ControlPresupuesto = ({ presupuesto, gastos }) => {
 
         const nuevoPorcentaje = (((presupuesto - totalDisponible ) / presupuesto) * 100).toFixed(2)
 
-        
-        
-
         setDisponible(totalDisponible)
         setGastado(totalGastado)
         setTimeout(() => {
@@ -27,6 +32,20 @@ const ControlPresupuesto = ({ presupuesto, gastos }) => {
 
 
     }, [gastos])
+    const handleResetApp = () => { 
+        const resultado = confirm('¿Estas seguro de querer resetear la aplicación?')
+        if(resultado){
+            setGastos([])
+            setPresupuesto(0)
+            setIsValidPresepuesto(false)
+            localStorage.removeItem('gastos')
+            localStorage.removeItem('presupuesto')
+        }else{
+            return null
+
+        }
+
+    }
 
 
     const formatearCantidad = (cantidad) => {
@@ -41,8 +60,8 @@ const ControlPresupuesto = ({ presupuesto, gastos }) => {
             <div>
                 <CircularProgressbar
                 styles={buildStyles({
-                    pathColor: '#3b85f6',
-                    textColor: '#3b85f6',
+                    pathColor: porcentaje > 100 ? 'red' : '#3b85f6',
+                    textColor: porcentaje > 100 ? 'red' : '#3b85f6',
                     trailColor: '#d6d6d6',
                     backgroundColor: '#3a3a3a',
                     
@@ -62,10 +81,16 @@ const ControlPresupuesto = ({ presupuesto, gastos }) => {
 
 
             <div className='contenido-presupuesto'>
+                <button 
+                className='reset-app'
+                type="button"
+                onClick={handleResetApp}
+
+                > resetear presupuesto</button>
                 <p>
                     <span>Presupuesto </span> {formatearCantidad(presupuesto)}
                 </p>
-                <p>
+                <p className={`${disponible<0 ? 'negativo':'' }`}>
                     <span>Disponible </span> {formatearCantidad(disponible)}
                 </p>
                 <p>
